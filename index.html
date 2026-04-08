@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>優勢賓果：那些我在報稅期間做的事</title>
+<meta property="og:title" content="報稅期間你做的事，很可能就是你的優勢！">
+<meta property="og:description" content="每個你在報稅期間的行為，背後都藏著你獨特的性格優勢。來玩優勢賓果，翻牌看看你是哪種人！">
+<meta property="og:image" content="http://learn4power.com/wp-content/uploads/2024/10/cropped-學次方logo-01-1.png">
+<meta property="og:url" content="https://learn4power.github.io/bingo_2605/">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,7 +58,6 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .share-area { display: none; text-align: center; margin-top: 1.5rem; }
 .share-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
 .share-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-.ig-copied { display: none; font-size: 11px; color: #426e6f; margin-top: 8px; }
 @media (max-width: 480px) {
   .game-wrapper { padding: 1.2rem 0.6rem 2rem; }
   .grid { gap: 5px; }
@@ -84,9 +88,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
     <div class="share-btns">
       <button class="btn btn-share" id="shareFB">Facebook</button>
       <button class="btn btn-share" id="shareLINE">LINE</button>
-      <button class="btn btn-share" id="shareIG">複製給 IG</button>
     </div>
-    <p class="ig-copied" id="igCopied">已複製！開啟 IG 貼上即可分享</p>
   </div>
 </div>
 
@@ -124,8 +126,6 @@ var hint = document.getElementById('hint');
 var shareArea = document.getElementById('shareArea');
 var shareFB = document.getElementById('shareFB');
 var shareLINE = document.getElementById('shareLINE');
-var shareIG = document.getElementById('shareIG');
-var igCopied = document.getElementById('igCopied');
 
 function buildGrid() {
   grid.innerHTML = '';
@@ -200,39 +200,13 @@ shareFB.addEventListener('click', function() {
 });
 
 shareLINE.addEventListener('click', function() {
-  var actions = [];
-  var strengths = [];
+  var lines = ['【學次方 X 報稅理財優勢賓果】我選了 ' + selected.size + ' 個行為！'];
   selected.forEach(function(i) {
-    actions.push('・' + DATA[i].action);
-    strengths.push(DATA[i].sa + '／' + DATA[i].sb);
+    lines.push('・' + DATA[i].action + '（' + DATA[i].sa + '／' + DATA[i].sb + '）');
   });
-  var text = '【學次方 X 報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
-  window.open('https://line.me/R/share?text=' + encodeURIComponent(text), '_blank');
-});
-
-shareIG.addEventListener('click', function() {
-  var actions = [];
-  var strengths = [];
-  selected.forEach(function(i) {
-    actions.push('・' + DATA[i].action);
-    strengths.push(DATA[i].sa + '／' + DATA[i].sb);
-  });
-  var text = '【學次方 X 報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(function() {
-      igCopied.style.display = 'block';
-      setTimeout(function() { igCopied.style.display = 'none'; }, 4000);
-    });
-  } else {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    igCopied.style.display = 'block';
-    setTimeout(function() { igCopied.style.display = 'none'; }, 4000);
-  }
+  lines.push('來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/');
+  var text = lines.join('%0A');
+  window.open('https://line.me/R/share?text=' + text, '_blank');
 });
 
 resetBtn.addEventListener('click', function() {
@@ -242,7 +216,7 @@ resetBtn.addEventListener('click', function() {
   phaseText.textContent = '選行為：點選你會出現的行為格子';
   phaseIcon.textContent = '1';
   confirmBtn.textContent = '確認選擇 →';
-  hint.textContent = '看看優勢：點選格子，卡片即會翻面，顯示行為對應的優勢';
+  hint.textContent = '點選「確認選擇」，卡片即會翻面，顯示行為對應的優勢';
   countLabel.textContent = '已選 0 格';
   shareArea.style.display = 'none';
   buildGrid();
