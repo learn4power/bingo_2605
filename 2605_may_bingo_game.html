@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五月賓果：報稅理財的優勢大盤點</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-light: #EEEDFE;
+    --purple-mid: #7F77DD;
+    --purple-dark: #3C3489;
+    --teal-light: #E1F5EE;
+    --teal-mid: #1D9E75;
+    --teal-dark: #085041;
+    --amber-light: #FAEEDA;
+    --amber-mid: #EF9F27;
+    --amber-dark: #633806;
+    --bg: #FAF9F7;
+    --card-bg: #FFFFFF;
+    --text: #1A1A1A;
+    --text-muted: #6B6B6B;
+    --border: rgba(0,0,0,0.1);
+    --radius: 10px;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .game-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: var(--amber-light);
+    color: var(--amber-dark);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .phase-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .phase-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .phase-icon.active-flip {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+  }
+
+  #phase-text { font-weight: 500; color: var(--text); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+    margin-bottom: 1.2rem;
+  }
+
+  .cell {
+    aspect-ratio: 1;
+    perspective: 700px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .cell-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--radius);
+  }
+
+  .cell.flipped .cell-inner { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 5px;
+    text-align: center;
+    transition: box-shadow 0.2s;
+    border: 1.5px solid var(--border);
+  }
+
+  .face-front {
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: clamp(8px, 1.6vw, 10.5px);
+    line-height: 1.4;
+    gap: 5px;
+  }
+
+  .face-back {
+    background: linear-gradient(135deg, #E8F7F1 0%, #D4EFE4 100%);
+    color: var(--teal-dark);
+    font-size: clamp(7.5px, 1.5vw, 10px);
+    line-height: 1.35;
+    gap: 4px;
+    transform: rotateY(180deg);
+    padding: 6px 5px;
+  }
+
+  .cell:hover .face-front {
+    border-color: var(--purple-mid);
+    box-shadow: 0 0 0 2px rgba(127, 119, 221, 0.15);
+  }
+
+  .cell.selected .face-front {
+    background: var(--purple-light);
+    border-color: var(--purple-mid);
+  }
+
+  .cell.free .face-front {
+    background: var(--amber-light);
+    border-color: var(--amber-mid);
+  }
+
+  .cell.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    transition: opacity 0.35s, transform 0.35s;
+  }
+
+  .check-ring {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--purple-mid);
+    display: none;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cell.selected .check-ring { display: flex; }
+
+  .check-ring svg {
+    width: 11px; height: 11px;
+    stroke: white;
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .action-text { font-size: inherit; }
+
+  .free-label {
+    font-size: 8.5px;
+    color: var(--amber-dark);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+  }
+
+  .back-str-a {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 700;
+    font-size: clamp(9px, 1.8vw, 12px);
+    color: var(--teal-dark);
+  }
+
+  .back-reason {
+    font-size: clamp(7px, 1.3vw, 9px);
+    color: #1D9E75;
+    opacity: 0.9;
+  }
+
+  .back-divider {
+    width: 50%;
+    border: none;
+    border-top: 1px solid rgba(29, 158, 117, 0.3);
+    margin: 3px 0;
+  }
+
+  .back-str-b {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 700;
+    font-size: clamp(8px, 1.6vw, 11px);
+    color: var(--teal-dark);
+    opacity: 0.85;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { background: #F0EEF8; border-color: var(--purple-mid); }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--purple-mid);
+    color: white;
+    border-color: var(--purple-dark);
+  }
+  .btn-primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
+
+  .btn-reset {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: transparent;
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+  .btn-reset:hover { background: #F5F4F0; color: var(--text); }
+
+  .count-label {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .hint {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    text-align: center;
+    min-height: 18px;
+    line-height: 1.5;
+  }
+
+  .result-banner {
+    display: none;
+    text-align: center;
+    background: var(--teal-light);
+    border: 1px solid rgba(29, 158, 117, 0.3);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-top: 1rem;
+    font-size: 13px;
+    color: var(--teal-dark);
+    line-height: 1.7;
+  }
+
+  .result-banner.show { display: block; animation: fadeIn 0.4s ease; }
+  .result-banner strong { font-family: 'Noto Serif TC', serif; font-size: 16px; display: block; margin-bottom: 4px; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 480px) {
+    .game-wrapper { padding: 1.2rem 0.6rem 2rem; }
+    .grid { gap: 5px; }
+    .face { padding: 5px 3px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="game-wrapper">
+
+  <div class="header">
+    <div class="header-badge">VIA 優勢 × 五月賓果</div>
+    <h1>報稅理財的優勢大盤點</h1>
+    <p>每個讓你崩潰（或感到驕傲）的報稅行為，<br>背後都藏著你獨特的人格優勢。</p>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase-icon" id="phaseIcon">1</div>
+    <span id="phase-text">選取中：點格子圈選符合自己的行為</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="confirmBtn">確認選擇 →</button>
+    <button class="btn btn-reset" id="resetBtn">重置</button>
+    <span class="count-label" id="countLabel">已選 1 格</span>
+  </div>
+
+  <p class="hint" id="hint">點選格子，圈起符合你的行為；確認後翻牌看看你的優勢</p>
+
+  <div class="result-banner" id="resultBanner">
+    <strong id="resultTitle"></strong>
+    <span id="resultDesc"></span>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+  { action:"提前一個月整理好所有收據單據", sa:"自律", ra:"透過建立日常秩序簡化未來任務", sb:"審慎", rb:"預防最後一刻可能出錯的風險" },
+  { action:"主動教長輩或朋友如何手機報稅", sa:"仁慈", ra:"出於想減輕他人負擔的熱心", sb:"領導力", rb:"享受組織資源帶領他人完成任務" },
+  { action:"上網研究各種免稅額與扣除額細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣", sb:"喜愛學習", rb:"享受掌握新知識成為稅務達人" },
+  { action:"找出最精省的申報組合省下每一分錢", sa:"判斷力", ra:"能理性分析數據不受情緒干擾", sb:"創造力", rb:"把節稅當作挑戰框架的益智遊戲" },
+  { action:"邊報稅邊感嘆這筆錢能蓋多少公園學校", sa:"靈性", ra:"看見個人支出與社會共好的連結", sb:"公民精神", rb:"展現對社會責任的認同與使命" },
+  { action:"稅金再高仍抱持「有能力繳稅」的感謝", sa:"感恩", ra:"專注於自己擁有的收入而非失去", sb:"希望", rb:"相信支出能換來更好的公共服務" },
+  { action:"系統大當機仍冷靜等待不生氣", sa:"自我調節", ra:"能掌控焦慮不讓外在影響心情", sb:"寬恕", rb:"對系統失誤抱持包容與體諒" },
+  { action:"在社群發廢文自嘲「國庫需要我」", sa:"幽默", ra:"用笑聲化解繳稅痛感帶給人輕鬆", sb:"社交智慧", rb:"用大眾共鳴話題與朋友保持連結" },
+  { action:"報完稅後認真檢視去年消費並反省人生", sa:"透視力", ra:"從金錢流向看清生命中重要的事", sb:"誠實", rb:"誠實面對自己的欲望與財務漏洞" },
+  { action:"不管多麻煩堅持搞懂每一項法條", sa:"喜愛學習", ra:"即使是枯燥條文也能沉浸其中", sb:"毅力", rb:"不論多大困難都堅持要完成目標" },
+  { action:"為了準時報稅推掉所有聚會", sa:"自律", ra:"能抵擋誘惑優先執行應盡的義務", sb:"毅力", rb:"面對繁瑣流程不達目的絕不罷休" },
+  { action:"報稅完立刻買禮物犒賞辛苦的自己", sa:"對美的欣賞", ra:"看見生活中的美好細節懂得享受", sb:"創造力", rb:"用小獎勵增加生活的趣味" },
+  { action:"雖然抱怨稅金但絕不虛報不逃漏稅", sa:"公平", ra:"堅持每個人都應遵守同樣的規則", sb:"誠實", rb:"內在道德標準極高追求透明行為" },
+  { action:"發現制度不公會想去反映爭取權利", sa:"勇氣", ra:"面對體制也敢於表達自己的立場", sb:"公平", rb:"核心動機在於追求整體分配正義" },
+  { action:"在截止最後一小時才驚險完成申報", sa:"熱情", ra:"在極限邊緣爆發行動力", sb:"勇敢", rb:"不畏懼危機能在混亂中保持行動" },
+  { action:"幫另一半或同事檢查漏掉的節稅項目", sa:"愛", ra:"透過實際協助表達對重要他人關懷", sb:"社交智慧", rb:"敏銳察覺他人需求適時給予回饋" },
+  { action:"帳戶餘額減少卻立刻鬥志昂揚想賺更多", sa:"熱情", ra:"金錢流動激發了生命與行動的渴望", sb:"希望", rb:"對未來賺錢能力充滿信心與期待" },
+  { action:"能一眼看出報稅軟體介面設計好不好", sa:"對美的欣賞", ra:"對高品質設計有天然的敏銳度", sb:"透視力", rb:"能超越數據看見系統背後的邏輯" },
+  { action:"冷靜引導焦慮的家人一步步完成報稅", sa:"領導力", ra:"在混亂中指引方向讓大家感到安心", sb:"寬恕", rb:"包容他人情緒手忙腳亂耐心陪伴" },
+  { action:"報完稅後主動分享今年的省錢心得", sa:"仁慈", ra:"樂於分享好處希望大家都能受益", sb:"公民精神", rb:"貢獻群體經驗是社群一份子的責任" },
+  { action:"對稅務人員或客服非常有禮貌地詢問", sa:"謙虛", ra:"不因自己是納稅人就自大尊重專業", sb:"社交智慧", rb:"友善互動能更有效率地解決問題" },
+  { action:"默默申報完畢覺得這只是人生小事", sa:"謙虛", ra:"不誇大自己的付出保持低調平穩", sb:"自我調節", rb:"能平和地看待生活中的各項變動" },
+  { action:"遇到不懂的項目詢問各方意見再決定", sa:"判斷力", ra:"習慣多方蒐證不輕易下草率結論", sb:"學習力", rb:"把報稅當作更新財務專業的機會" },
+  { action:"心痛歸心痛仍能看見政府建設的優點", sa:"感恩", ra:"對現有的社會基礎設施抱持感謝", sb:"透視力", rb:"能見到金錢流失背後長遠的社會運作" },
+  { action:"【✦ 自由位 ✦】報稅後與另一半討論家庭財務目標", sa:"愛", ra:"將財務視為維繫保護家庭關係的基石", sb:"希望", rb:"對共同構建的未來充滿美好憧憬", free: true },
+];
+
+let phase = 'select';
+let selected = new Set([24]);
+let flipped = new Set();
+
+const grid = document.getElementById('grid');
+const confirmBtn = document.getElementById('confirmBtn');
+const resetBtn = document.getElementById('resetBtn');
+const countLabel = document.getElementById('countLabel');
+const phaseText = document.getElementById('phase-text');
+const phaseIcon = document.getElementById('phaseIcon');
+const hint = document.getElementById('hint');
+const resultBanner = document.getElementById('resultBanner');
+
+function buildGrid() {
+  grid.innerHTML = '';
+  DATA.forEach((d, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'cell' + (d.free ? ' free' : '') + (selected.has(i) ? ' selected' : '');
+    cell.dataset.index = i;
+    cell.innerHTML = `
+      <div class="cell-inner">
+        <div class="face face-front">
+          <span class="check-ring"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+          <span class="action-text">${d.action}</span>
+          ${d.free ? '<span class="free-label">已勾選</span>' : ''}
+        </div>
+        <div class="face face-back">
+          <span class="back-str-a">${d.sa}</span>
+          <span class="back-reason">${d.ra}</span>
+          <hr class="back-divider">
+          <span class="back-str-b">${d.sb}</span>
+          <span class="back-reason">${d.rb}</span>
+        </div>
+      </div>`;
+    cell.addEventListener('click', () => onCellClick(i));
+    grid.appendChild(cell);
+  });
+}
+
+function onCellClick(i) {
+  const cell = grid.children[i];
+  if (phase === 'select') {
+    if (DATA[i].free) return;
+    if (selected.has(i)) {
+      selected.delete(i);
+      cell.classList.remove('selected');
+    } else {
+      selected.add(i);
+      cell.classList.add('selected');
+    }
+    const s = selected.size;
+    countLabel.textContent = `已選 ${s} 格`;
+  } else if (phase === 'flip') {
+    if (!selected.has(i)) return;
+    if (flipped.has(i)) {
+      flipped.delete(i);
+      cell.classList.remove('flipped');
+    } else {
+      flipped.add(i);
+      cell.classList.add('flipped');
+    }
+  }
+}
+
+function showResult(count) {
+  const title = document.getElementById('resultTitle');
+  const desc = document.getElementById('resultDesc');
+  let msg, sub;
+  if (count <= 5) {
+    msg = `你選了 ${count} 個行為，是低調的財務穩健派`;
+    sub = '不慌不忙，用自己的節奏掌控財務。翻開格子看看你的優勢吧！';
+  } else if (count <= 12) {
+    msg = `你選了 ${count} 個行為，是務實又有溫度的理財人`;
+    sub = '理性與感性兼具，報稅不只是義務，也是一次自我認識的機會。';
+  } else if (count <= 18) {
+    msg = `你選了 ${count} 個行為，是優勢多元的全方位報稅達人`;
+    sub = '你的人格優勢相當豐富！翻牌看看哪些優勢最讓你驚喜。';
+  } else {
+    msg = `你選了 ${count} 個行為，根本是報稅界的全才`;
+    sub = '每個格子都是一面鏡子，反映出你的獨特優勢組合。';
+  }
+  title.textContent = msg;
+  desc.textContent = sub;
+  resultBanner.classList.add('show');
+}
+
+confirmBtn.addEventListener('click', () => {
+  if (phase === 'select') {
+    phase = 'flip';
+    DATA.forEach((d, i) => {
+      const cell = grid.children[i];
+      if (!selected.has(i)) cell.classList.add('hidden');
+    });
+    confirmBtn.textContent = '全部翻回正面';
+    phaseText.textContent = '翻牌中：點格子查看你的優勢';
+    phaseIcon.textContent = '2';
+    phaseIcon.classList.add('active-flip');
+    hint.textContent = '點選格子翻面看優勢，再點一次翻回正面';
+    showResult(selected.size);
+  } else {
+    flipped.forEach(i => grid.children[i].classList.remove('flipped'));
+    flipped.clear();
+    hint.textContent = '已全部翻回正面，點個別格子再翻一次';
+  }
+});
+
+resetBtn.addEventListener('click', () => {
+  phase = 'select';
+  selected = new Set([24]);
+  flipped = new Set();
+  phaseText.textContent = '選取中：點格子圈選符合自己的行為';
+  phaseIcon.textContent = '1';
+  phaseIcon.classList.remove('active-flip');
+  confirmBtn.textContent = '確認選擇 →';
+  hint.textContent = '點選格子，圈起符合你的行為；確認後翻牌看看你的優勢';
+  countLabel.textContent = '已選 1 格';
+  resultBanner.classList.remove('show');
+  buildGrid();
+});
+
+buildGrid();
+</script>
+</body>
+</html>
