@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>五月賓果：報稅理財的優勢大盤點</title>
+<title>優勢賓果：那些我在報稅期間做的事</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,21 +64,21 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 <body>
 <div class="game-wrapper">
   <div class="header">
-    <div class="header-badge">VIA 優勢 × 五月賓果</div>
-    <h1>報稅理財的優勢大盤點</h1>
-    <p>每個讓你崩潰（或感到驕傲）的報稅行為，<br>背後都藏著你獨特的人格優勢。</p>
+    <div class="header-badge">五月大事 × 優勢賓果</div>
+    <h1>那些我在報稅期間做的事</h1>
+    <p>每個你在報稅期間的行為，<br>背後都藏著你獨特的性格優勢。</p>
   </div>
   <div class="phase-bar">
     <div class="phase-icon" id="phaseIcon">1</div>
-    <span id="phase-text">選取中：點格子圈選符合自己的行為</span>
+    <span id="phase-text">選行為：點選你會出現的行為格子</span>
   </div>
   <div class="grid" id="grid"></div>
   <div class="controls">
     <button class="btn btn-primary" id="confirmBtn">確認選擇 →</button>
-    <button class="btn btn-reset" id="resetBtn">重置</button>
+    <button class="btn btn-reset" id="resetBtn">再選一次</button>
     <span class="count-label" id="countLabel">已選 0 格</span>
   </div>
-  <p class="hint" id="hint">點選格子，圈起符合你的行為；確認後翻牌看看你的優勢</p>
+  <p class="hint" id="hint">點選「確認選擇」，卡片即會翻面，顯示行為對應的優勢</p>
   <div class="share-area" id="shareArea">
     <p class="share-label">分享你的結果</p>
     <div class="share-btns">
@@ -92,20 +92,20 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 
 <script>
 var DATA = [
-  { action:"早就整理好單據，5/1 準時申報", sa:"自律", ra:"習慣建立秩序，不讓任務堆積。", sb:"審慎", rb:"預留緩衝，避免最後一刻出錯。" },
-  { action:"主動幫家人或科技苦手申報稅務", sa:"仁慈", ra:"純粹想幫他人減輕負擔的善意。", sb:"領導力", rb:"享受組織並帶領他人完成任務。" },
-  { action:"上網徹底研究節稅條文與法規細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣。", sb:"學習力", rb:"享受掌握專業知識帶來的滿足感。" },
+  { action:"早早整理好單據，5/1 準時申報", sa:"自律", ra:"習慣建立秩序，不讓任務堆積。", sb:"審慎", rb:"預留緩衝，避免最後一刻出錯。" },
+  { action:"幫家人或科技苦手申報稅務", sa:"仁慈", ra:"純粹想幫他人減輕負擔的善意。", sb:"領導力", rb:"享受組織並帶領他人完成任務。" },
+  { action:"徹底研究節稅條文與法規細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣。", sb:"學習力", rb:"享受掌握專業知識帶來的滿足感。" },
   { action:"算出最精省的申報組合，省下每一分錢", sa:"判斷力", ra:"理性分析數據，做出最優決策。", sb:"創造力", rb:"把節稅當作一場益智遊戲在破關。" },
   { action:"邊報稅邊感嘆這筆錢能帶來的社會貢獻", sa:"靈性", ra:"看見個人支出與社會共好的連結。", sb:"公民精神", rb:"認同身為公民的集體責任與貢獻。" },
   { action:"雖然稅金痛，但仍感謝自己有能力賺錢", sa:"感恩", ra:"專注於擁有的收入而非失去的現金。", sb:"希望", rb:"相信支出會換來未來更好的公共環境。" },
   { action:"遇到系統大當機或卡關，仍能冷靜等待", sa:"自我調節", ra:"掌控焦慮，不讓外在干擾心情。", sb:"寬恕", rb:"包容系統的失誤，不輕易產生怨氣。" },
-  { action:"在社群發幽默廢文，自嘲「國庫需要我」", sa:"幽默", ra:"用笑聲轉化繳稅的痛感，帶動氣氛。", sb:"社交智慧", rb:"懂得用大眾共鳴話題與人連結。" },
+  { action:"在社群發文，自嘲「國庫需要我」", sa:"幽默", ra:"用笑聲轉化繳稅的痛感，帶動氣氛。", sb:"社交智慧", rb:"懂得用大眾共鳴話題與人連結。" },
   { action:"報稅後認真檢視消費，反省人生與價值", sa:"透視力", ra:"能從金錢流向中看清什麼最重要。", sb:"誠實", rb:"誠實面對自己的欲望與財務現狀。" },
   { action:"不管法條多枯燥，堅持一定要讀到懂", sa:"喜愛學習", ra:"即使是生硬內容也能沉浸學習。", sb:"毅力", rb:"面對繁瑣流程，有不達目的不罷休的韌性。" },
   { action:"報稅完買個好東西，儀式感獎勵自己", sa:"欣賞美與卓越", ra:"看見生活美感並懂得享受。", sb:"勇氣", rb:"有膽量決定如何支配辛苦賺來的錢。" },
   { action:"雖然抱怨制度，但仍堅持誠實合法申報", sa:"公平", ra:"堅持每個人都應遵守同樣的規範。", sb:"誠實", rb:"內在道德標準極高，追求真實行為。" },
-  { action:"報稅期限最後一小時，才驚險完成申報", sa:"熱情", ra:"在極限邊緣發揮爆發力，活得有張力。", sb:"勇敢", rb:"不畏懼壓力，能在危急時刻保持行動。" },
-  { action:"冷靜引導焦慮的家人完成繁瑣步驟", sa:"領導力", ra:"在混亂中指引方向，讓大家安心。", sb:"謙虛", rb:"不誇大自己的付出，默默解決問題。" },
+  { action:"報稅期限最後一小時，才是我申報的時間", sa:"熱情", ra:"在極限邊緣發揮爆發力，活得有張力。", sb:"勇敢", rb:"不畏懼壓力，能在危急時刻保持行動。" },
+  { action:"引導焦慮的家人完成繁瑣步驟", sa:"領導力", ra:"在混亂中指引方向，讓大家安心。", sb:"謙虛", rb:"不誇大自己的付出，默默解決問題。" },
   { action:"對稅務人員或客服保持禮貌、客氣詢問", sa:"謙虛", ra:"尊重專業，不因身為納稅人而自大。", sb:"社交智慧", rb:"知道友善溝通是解決問題的捷徑。" },
   { action:"與另一半討論報稅後的家庭財務願景", sa:"愛", ra:"將財務視為維護家庭關係的重要基石。", sb:"希望", rb:"對共同構建的未來藍圖充滿美好憧憬。" }
 ];
@@ -184,9 +184,9 @@ confirmBtn.addEventListener('click', function() {
       if (!selected.has(i)) grid.children[i].classList.add('hidden');
     }
     confirmBtn.textContent = '全部翻回正面';
-    phaseText.textContent = '翻牌中：點格子查看你的優勢';
+    phaseText.textContent = '看看優勢：點選格子，卡片即會翻面，顯示行為對應的優勢';
     phaseIcon.textContent = '2';
-    hint.textContent = '點選格子翻面看優勢，再點一次即可翻回正面';
+    hint.textContent = '再點一次即可翻回正面';
     shareArea.style.display = 'block';
   } else {
     flipped.forEach(function(i) { grid.children[i].classList.remove('flipped'); });
@@ -206,7 +206,7 @@ shareLINE.addEventListener('click', function() {
     actions.push('・' + DATA[i].action);
     strengths.push(DATA[i].sa + '／' + DATA[i].sb);
   });
-  var text = '【報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
+  var text = '【學次方 X 報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
   window.open('https://line.me/R/share?text=' + encodeURIComponent(text), '_blank');
 });
 
@@ -217,7 +217,7 @@ shareIG.addEventListener('click', function() {
     actions.push('・' + DATA[i].action);
     strengths.push(DATA[i].sa + '／' + DATA[i].sb);
   });
-  var text = '【報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
+  var text = '【學次方 X 報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(function() {
       igCopied.style.display = 'block';
@@ -239,10 +239,10 @@ resetBtn.addEventListener('click', function() {
   phase = 'select';
   selected = new Set();
   flipped = new Set();
-  phaseText.textContent = '選取中：點格子圈選符合自己的行為';
+  phaseText.textContent = '選行為：點選你會出現的行為格子';
   phaseIcon.textContent = '1';
   confirmBtn.textContent = '確認選擇 →';
-  hint.textContent = '點選格子，圈起符合你的行為；確認後翻牌看看你的優勢';
+  hint.textContent = '看看優勢：點選格子，卡片即會翻面，顯示行為對應的優勢';
   countLabel.textContent = '已選 0 格';
   shareArea.style.display = 'none';
   buildGrid();
