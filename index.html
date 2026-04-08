@@ -200,21 +200,38 @@ shareFB.addEventListener('click', function() {
 });
 
 shareLINE.addEventListener('click', function() {
-  var actions = Array.from(selected).map(function(i) { return '・' + DATA[i].action; }).join('\n');
-  var strengths = Array.from(selected).map(function(i) { return DATA[i].sa + '、' + DATA[i].sb; }).join('、');
-  var text = '我在「報稅理財優勢賓果」選了 ' + selected.size + ' 個行為！\n\n' + actions + '\n\n我的優勢包含：' + strengths + '\n\n來玩看看你是哪種人 👉 ' + location.href;
-  window.open('https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(location.href) + '&text=' + encodeURIComponent(text), '_blank');
+  var actions = [];
+  var strengths = [];
+  selected.forEach(function(i) {
+    actions.push('・' + DATA[i].action);
+    strengths.push(DATA[i].sa + '／' + DATA[i].sb);
+  });
+  var text = '【報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
+  window.open('https://line.me/R/share?text=' + encodeURIComponent(text), '_blank');
 });
 
 shareIG.addEventListener('click', function() {
-  var actions = Array.from(selected).map(function(i) { return '・' + DATA[i].action; }).join('\n');
-  var strengths = Array.from(selected).map(function(i) { return DATA[i].sa + '、' + DATA[i].sb; }).join('、');
-  var text = '我在「報稅理財優勢賓果」選了 ' + selected.size + ' 個行為！\n\n' + actions + '\n\n我的優勢包含：' + strengths + '\n\n來玩看看你是哪種人 👉 ' + location.href;
+  var actions = [];
+  var strengths = [];
+  selected.forEach(function(i) {
+    actions.push('・' + DATA[i].action);
+    strengths.push(DATA[i].sa + '／' + DATA[i].sb);
+  });
+  var text = '【報稅理財優勢賓果】\n我選了 ' + selected.size + ' 個行為！\n\n' + actions.join('\n') + '\n\n我的優勢：' + strengths.join('、') + '\n\n來玩看看你是哪種人 👉 https://learn4power.github.io/bingo_2605/';
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(function() {
       igCopied.style.display = 'block';
       setTimeout(function() { igCopied.style.display = 'none'; }, 4000);
     });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    igCopied.style.display = 'block';
+    setTimeout(function() { igCopied.style.display = 'none'; }, 4000);
   }
 });
 
