@@ -106,7 +106,7 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 7px;
     margin-bottom: 1.2rem;
   }
@@ -146,15 +146,15 @@
   .face-front {
     background: var(--card-bg);
     color: var(--text);
-    font-size: clamp(8px, 1.6vw, 10.5px);
+    font-size: clamp(9px, 1.8vw, 12px);
     line-height: 1.4;
     gap: 5px;
   }
 
   .face-back {
-    background: linear-gradient(135deg, #E8F7F1 0%, #D4EFE4 100%);
-    color: var(--teal-dark);
-    font-size: clamp(7.5px, 1.5vw, 10px);
+    background: #589596;
+    color: #ffffff;
+    font-size: clamp(8.5px, 1.7vw, 11.5px);
     line-height: 1.35;
     gap: 4px;
     transform: rotateY(180deg);
@@ -167,8 +167,8 @@
   }
 
   .cell.selected .face-front {
-    background: var(--purple-light);
-    border-color: var(--purple-mid);
+    background: #b1d1cf;
+    border-color: #7fb8b6;
   }
 
   .cell.free .face-front {
@@ -216,29 +216,27 @@
   .back-str-a {
     font-family: 'Noto Serif TC', serif;
     font-weight: 700;
-    font-size: clamp(9px, 1.8vw, 12px);
-    color: var(--teal-dark);
+    font-size: clamp(10px, 2vw, 13px);
+    color: #ffffff;
   }
 
   .back-reason {
-    font-size: clamp(7px, 1.3vw, 9px);
-    color: #1D9E75;
-    opacity: 0.9;
+    font-size: clamp(8px, 1.5vw, 10px);
+    color: rgba(255,255,255,0.85);
   }
 
   .back-divider {
     width: 50%;
     border: none;
-    border-top: 1px solid rgba(29, 158, 117, 0.3);
+    border-top: 1px solid rgba(255,255,255,0.3);
     margin: 3px 0;
   }
 
   .back-str-b {
     font-family: 'Noto Serif TC', serif;
     font-weight: 700;
-    font-size: clamp(8px, 1.6vw, 11px);
-    color: var(--teal-dark);
-    opacity: 0.85;
+    font-size: clamp(9px, 1.8vw, 12px);
+    color: rgba(255,255,255,0.9);
   }
 
   .controls {
@@ -312,7 +310,14 @@
   .result-banner.show { display: block; animation: fadeIn 0.4s ease; }
   .result-banner strong { font-family: 'Noto Serif TC', serif; font-size: 16px; display: block; margin-bottom: 4px; }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .btn-share {
+    background: #426e6f;
+    color: white;
+    border-color: #2f4f50;
+    padding: 10px 28px;
+    font-size: 14px;
+  }
+  .btn-share:hover { background: #2f4f50; border-color: #2f4f50; }
 
   @media (max-width: 480px) {
     .game-wrapper { padding: 1.2rem 0.6rem 2rem; }
@@ -341,49 +346,47 @@
   <div class="controls">
     <button class="btn btn-primary" id="confirmBtn">確認選擇 →</button>
     <button class="btn btn-reset" id="resetBtn">重置</button>
-    <span class="count-label" id="countLabel">已選 1 格</span>
+    <span class="count-label" id="countLabel">已選 0 格</span>
   </div>
 
   <p class="hint" id="hint">點選格子，圈起符合你的行為；確認後翻牌看看你的優勢</p>
 
-  <div class="result-banner" id="resultBanner">
-    <strong id="resultTitle"></strong>
-    <span id="resultDesc"></span>
+  <div id="shareArea" style="display:none; text-align:center; margin-top:1.5rem;">
+    <p style="font-size:12px; color:#6B6B6B; margin-bottom:10px;">分享你的結果</p>
+    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-share" id="shareFB">Facebook</button>
+      <button class="btn btn-share" id="shareLINE">LINE</button>
+      <button class="btn btn-share" id="shareIG">複製給 IG</button>
+    </div>
+    <p id="igCopied" style="display:none; font-size:11px; color:#426e6f; margin-top:8px;">已複製！開啟 IG 貼上即可分享</p>
   </div>
+
+
 
 </div>
 
 <script>
 const DATA = [
-  { action:"提前一個月整理好所有收據單據", sa:"自律", ra:"透過建立日常秩序簡化未來任務", sb:"審慎", rb:"預防最後一刻可能出錯的風險" },
-  { action:"主動教長輩或朋友如何手機報稅", sa:"仁慈", ra:"出於想減輕他人負擔的熱心", sb:"領導力", rb:"享受組織資源帶領他人完成任務" },
-  { action:"上網研究各種免稅額與扣除額細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣", sb:"喜愛學習", rb:"享受掌握新知識成為稅務達人" },
-  { action:"找出最精省的申報組合省下每一分錢", sa:"判斷力", ra:"能理性分析數據不受情緒干擾", sb:"創造力", rb:"把節稅當作挑戰框架的益智遊戲" },
-  { action:"邊報稅邊感嘆這筆錢能蓋多少公園學校", sa:"靈性", ra:"看見個人支出與社會共好的連結", sb:"公民精神", rb:"展現對社會責任的認同與使命" },
-  { action:"稅金再高仍抱持「有能力繳稅」的感謝", sa:"感恩", ra:"專注於自己擁有的收入而非失去", sb:"希望", rb:"相信支出能換來更好的公共服務" },
-  { action:"系統大當機仍冷靜等待不生氣", sa:"自我調節", ra:"能掌控焦慮不讓外在影響心情", sb:"寬恕", rb:"對系統失誤抱持包容與體諒" },
-  { action:"在社群發廢文自嘲「國庫需要我」", sa:"幽默", ra:"用笑聲化解繳稅痛感帶給人輕鬆", sb:"社交智慧", rb:"用大眾共鳴話題與朋友保持連結" },
-  { action:"報完稅後認真檢視去年消費並反省人生", sa:"透視力", ra:"從金錢流向看清生命中重要的事", sb:"誠實", rb:"誠實面對自己的欲望與財務漏洞" },
-  { action:"不管多麻煩堅持搞懂每一項法條", sa:"喜愛學習", ra:"即使是枯燥條文也能沉浸其中", sb:"毅力", rb:"不論多大困難都堅持要完成目標" },
-  { action:"為了準時報稅推掉所有聚會", sa:"自律", ra:"能抵擋誘惑優先執行應盡的義務", sb:"毅力", rb:"面對繁瑣流程不達目的絕不罷休" },
-  { action:"報稅完立刻買禮物犒賞辛苦的自己", sa:"對美的欣賞", ra:"看見生活中的美好細節懂得享受", sb:"創造力", rb:"用小獎勵增加生活的趣味" },
-  { action:"雖然抱怨稅金但絕不虛報不逃漏稅", sa:"公平", ra:"堅持每個人都應遵守同樣的規則", sb:"誠實", rb:"內在道德標準極高追求透明行為" },
-  { action:"發現制度不公會想去反映爭取權利", sa:"勇氣", ra:"面對體制也敢於表達自己的立場", sb:"公平", rb:"核心動機在於追求整體分配正義" },
-  { action:"在截止最後一小時才驚險完成申報", sa:"熱情", ra:"在極限邊緣爆發行動力", sb:"勇敢", rb:"不畏懼危機能在混亂中保持行動" },
-  { action:"幫另一半或同事檢查漏掉的節稅項目", sa:"愛", ra:"透過實際協助表達對重要他人關懷", sb:"社交智慧", rb:"敏銳察覺他人需求適時給予回饋" },
-  { action:"帳戶餘額減少卻立刻鬥志昂揚想賺更多", sa:"熱情", ra:"金錢流動激發了生命與行動的渴望", sb:"希望", rb:"對未來賺錢能力充滿信心與期待" },
-  { action:"能一眼看出報稅軟體介面設計好不好", sa:"對美的欣賞", ra:"對高品質設計有天然的敏銳度", sb:"透視力", rb:"能超越數據看見系統背後的邏輯" },
-  { action:"冷靜引導焦慮的家人一步步完成報稅", sa:"領導力", ra:"在混亂中指引方向讓大家感到安心", sb:"寬恕", rb:"包容他人情緒手忙腳亂耐心陪伴" },
-  { action:"報完稅後主動分享今年的省錢心得", sa:"仁慈", ra:"樂於分享好處希望大家都能受益", sb:"公民精神", rb:"貢獻群體經驗是社群一份子的責任" },
-  { action:"對稅務人員或客服非常有禮貌地詢問", sa:"謙虛", ra:"不因自己是納稅人就自大尊重專業", sb:"社交智慧", rb:"友善互動能更有效率地解決問題" },
-  { action:"默默申報完畢覺得這只是人生小事", sa:"謙虛", ra:"不誇大自己的付出保持低調平穩", sb:"自我調節", rb:"能平和地看待生活中的各項變動" },
-  { action:"遇到不懂的項目詢問各方意見再決定", sa:"判斷力", ra:"習慣多方蒐證不輕易下草率結論", sb:"學習力", rb:"把報稅當作更新財務專業的機會" },
-  { action:"心痛歸心痛仍能看見政府建設的優點", sa:"感恩", ra:"對現有的社會基礎設施抱持感謝", sb:"透視力", rb:"能見到金錢流失背後長遠的社會運作" },
-  { action:"【✦ 自由位 ✦】報稅後與另一半討論家庭財務目標", sa:"愛", ra:"將財務視為維繫保護家庭關係的基石", sb:"希望", rb:"對共同構建的未來充滿美好憧憬", free: true },
+  { action:"早就整理好單據，5/1 準時申報", sa:"自律", ra:"習慣建立秩序，不讓任務堆積。", sb:"審慎", rb:"預留緩衝，避免最後一刻出錯。" },
+  { action:"主動幫家人或科技苦手申報稅務", sa:"仁慈", ra:"純粹想幫他人減輕負擔的善意。", sb:"領導力", rb:"享受組織並帶領他人完成任務。" },
+  { action:"上網徹底研究節稅條文與法規細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣。", sb:"學習力", rb:"享受掌握專業知識帶來的滿足感。" },
+  { action:"算出最精省的申報組合，省下每一分錢", sa:"判斷力", ra:"理性分析數據，做出最優決策。", sb:"創造力", rb:"把節稅當作一場益智遊戲在破關。" },
+  { action:"邊報稅邊感嘆這筆錢能帶來的社會貢獻", sa:"靈性", ra:"看見個人支出與社會共好的連結。", sb:"公民精神", rb:"認同身為公民的集體責任與貢獻。" },
+  { action:"雖然稅金痛，但仍感謝自己有能力賺錢", sa:"感恩", ra:"專注於擁有的收入而非失去的現金。", sb:"希望", rb:"相信支出會換來未來更好的公共環境。" },
+  { action:"遇到系統大當機或卡關，仍能冷靜等待", sa:"自我調節", ra:"掌控焦慮，不讓外在干擾心情。", sb:"寬恕", rb:"包容系統的失誤，不輕易產生怨氣。" },
+  { action:"在社群發幽默廢文，自嘲「國庫需要我」", sa:"幽默", ra:"用笑聲轉化繳稅的痛感，帶動氣氛。", sb:"社交智慧", rb:"懂得用大眾共鳴話題與人連結。" },
+  { action:"報稅後認真檢視消費，反省人生與價值", sa:"透視力", ra:"能從金錢流向中看清什麼最重要。", sb:"誠實", rb:"誠實面對自己的欲望與財務現狀。" },
+  { action:"不管法條多枯燥，堅持一定要讀到懂", sa:"喜愛學習", ra:"即使是生硬內容也能沉浸學習。", sb:"毅力", rb:"面對繁瑣流程，有不達目的不罷休的韌性。" },
+  { action:"報稅完買個好東西，儀式感獎勵自己", sa:"欣賞美與卓越", ra:"看見生活美感並懂得享受。", sb:"勇氣", rb:"有膽量決定如何支配辛苦賺來的錢。" },
+  { action:"雖然抱怨制度，但仍堅持誠實合法申報", sa:"公平", ra:"堅持每個人都應遵守同樣的規範。", sb:"誠實", rb:"內在道德標準極高，追求真實行為。" },
+  { action:"報稅期限最後一小時，才驚險完成申報", sa:"熱情", ra:"在極限邊緣發揮爆發力，活得有張力。", sb:"勇敢", rb:"不畏懼壓力，能在危急時刻保持行動。" },
+  { action:"冷靜引導焦慮的家人完成繁瑣步驟", sa:"領導力", ra:"在混亂中指引方向，讓大家安心。", sb:"謙虛", rb:"不誇大自己的付出，默默解決問題。" },
+  { action:"對稅務人員或客服保持禮貌、客氣詢問", sa:"謙虛", ra:"尊重專業，不因身為納稅人而自大。", sb:"社交智慧", rb:"知道友善溝通是解決問題的捷徑。" },
+  { action:"與另一半討論報稅後的家庭財務願景", sa:"愛", ra:"將財務視為維護家庭關係的重要基石。", sb:"希望", rb:"對共同構建的未來藍圖充滿美好憧憬。" },
 ];
 
 let phase = 'select';
-let selected = new Set([24]);
+let selected = new Set();
 let flipped = new Set();
 
 const grid = document.getElementById('grid');
@@ -393,9 +396,9 @@ const countLabel = document.getElementById('countLabel');
 const phaseText = document.getElementById('phase-text');
 const phaseIcon = document.getElementById('phaseIcon');
 const hint = document.getElementById('hint');
-const resultBanner = document.getElementById('resultBanner');
 
-function buildGrid() {
+const shareArea = document.getElementById('shareArea');
+const shareBtn = document.getElementById('shareBtn');
   grid.innerHTML = '';
   DATA.forEach((d, i) => {
     const cell = document.createElement('div');
@@ -406,7 +409,7 @@ function buildGrid() {
         <div class="face face-front">
           <span class="check-ring"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
           <span class="action-text">${d.action}</span>
-          ${d.free ? '<span class="free-label">已勾選</span>' : ''}
+          ${d.free ? '<span class="free-label">自由位</span>' : ''}
         </div>
         <div class="face face-back">
           <span class="back-str-a">${d.sa}</span>
@@ -446,27 +449,7 @@ function onCellClick(i) {
   }
 }
 
-function showResult(count) {
-  const title = document.getElementById('resultTitle');
-  const desc = document.getElementById('resultDesc');
-  let msg, sub;
-  if (count <= 5) {
-    msg = `你選了 ${count} 個行為，是低調的財務穩健派`;
-    sub = '不慌不忙，用自己的節奏掌控財務。翻開格子看看你的優勢吧！';
-  } else if (count <= 12) {
-    msg = `你選了 ${count} 個行為，是務實又有溫度的理財人`;
-    sub = '理性與感性兼具，報稅不只是義務，也是一次自我認識的機會。';
-  } else if (count <= 18) {
-    msg = `你選了 ${count} 個行為，是優勢多元的全方位報稅達人`;
-    sub = '你的人格優勢相當豐富！翻牌看看哪些優勢最讓你驚喜。';
-  } else {
-    msg = `你選了 ${count} 個行為，根本是報稅界的全才`;
-    sub = '每個格子都是一面鏡子，反映出你的獨特優勢組合。';
-  }
-  title.textContent = msg;
-  desc.textContent = sub;
-  resultBanner.classList.add('show');
-}
+
 
 confirmBtn.addEventListener('click', () => {
   if (phase === 'select') {
@@ -480,7 +463,7 @@ confirmBtn.addEventListener('click', () => {
     phaseIcon.textContent = '2';
     phaseIcon.classList.add('active-flip');
     hint.textContent = '點選格子翻面看優勢，再點一次翻回正面';
-    showResult(selected.size);
+    shareArea.style.display = 'block';
   } else {
     flipped.forEach(i => grid.children[i].classList.remove('flipped'));
     flipped.clear();
@@ -488,17 +471,51 @@ confirmBtn.addEventListener('click', () => {
   }
 });
 
+const shareFB = document.getElementById('shareFB');
+const shareLINE = document.getElementById('shareLINE');
+const shareIG = document.getElementById('shareIG');
+const igCopied = document.getElementById('igCopied');
+
+function getShareText() {
+  const actions = [...selected].map(i => `・${DATA[i].action}`).join('\n');
+  const strengths = [...selected].map(i => `${DATA[i].sa}、${DATA[i].sb}`).join('、');
+  return { actions, strengths };
+}
+
+shareFB.addEventListener('click', () => {
+  const url = encodeURIComponent(location.href);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+});
+
+shareLINE.addEventListener('click', () => {
+  const { actions, strengths } = getShareText();
+  const text = `我在「報稅理財優勢賓果」選了 ${selected.size} 個行為！\n\n${actions}\n\n我的優勢包含：${strengths}\n\n來玩看看你是哪種人 👉 ${location.href}`;
+  window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+});
+
+shareIG.addEventListener('click', () => {
+  const { actions, strengths } = getShareText();
+  const text = `我在「報稅理財優勢賓果」選了 ${selected.size} 個行為！\n\n${actions}\n\n我的優勢包含：${strengths}\n\n來玩看看你是哪種人 👉 ${location.href}`;
+  navigator.clipboard.writeText(text).then(() => {
+    igCopied.style.display = 'block';
+    setTimeout(() => { igCopied.style.display = 'none'; }, 4000);
+    if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+      setTimeout(() => { window.location.href = 'instagram://'; }, 500);
+    }
+  });
+});
+
 resetBtn.addEventListener('click', () => {
   phase = 'select';
-  selected = new Set([24]);
+  selected = new Set();
   flipped = new Set();
   phaseText.textContent = '選取中：點格子圈選符合自己的行為';
   phaseIcon.textContent = '1';
   phaseIcon.classList.remove('active-flip');
   confirmBtn.textContent = '確認選擇 →';
   hint.textContent = '點選格子，圈起符合你的行為；確認後翻牌看看你的優勢';
-  countLabel.textContent = '已選 1 格';
-  resultBanner.classList.remove('show');
+  countLabel.textContent = '已選 0 格';
+  shareArea.style.display = 'none';
   buildGrid();
 });
 
