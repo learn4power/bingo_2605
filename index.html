@@ -6,367 +6,92 @@
 <title>五月賓果：報稅理財的優勢大盤點</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --purple-light: #EEEDFE;
-    --purple-mid: #7F77DD;
-    --purple-dark: #3C3489;
-    --teal-light: #E1F5EE;
-    --teal-mid: #1D9E75;
-    --teal-dark: #085041;
-    --amber-light: #FAEEDA;
-    --amber-mid: #EF9F27;
-    --amber-dark: #633806;
-    --bg: #FAF9F7;
-    --card-bg: #FFFFFF;
-    --text: #1A1A1A;
-    --text-muted: #6B6B6B;
-    --border: rgba(0,0,0,0.1);
-    --radius: 10px;
-  }
-
-  body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0;
-  }
-
-  .game-wrapper {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 2rem 1rem 3rem;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 1.8rem;
-  }
-
-  .header-badge {
-    display: inline-block;
-    background: var(--amber-light);
-    color: var(--amber-dark);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-  }
-
-  .header h1 {
-    font-family: 'Noto Serif TC', serif;
-    font-size: clamp(20px, 5vw, 28px);
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-
-  .header p {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.7;
-  }
-
-  .phase-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .phase-icon {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    flex-shrink: 0;
-    background: var(--purple-light);
-    color: var(--purple-dark);
-    transition: background 0.3s, color 0.3s;
-  }
-
-  .phase-icon.active-flip {
-    background: var(--teal-light);
-    color: var(--teal-dark);
-  }
-
-  #phase-text { font-weight: 500; color: var(--text); }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 7px;
-    margin-bottom: 1.2rem;
-  }
-
-  .cell {
-    aspect-ratio: 1;
-    perspective: 700px;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .cell-inner {
-    width: 100%; height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: var(--radius);
-  }
-
-  .cell.flipped .cell-inner { transform: rotateY(180deg); }
-
-  .face {
-    position: absolute; inset: 0;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 7px 5px;
-    text-align: center;
-    transition: box-shadow 0.2s;
-    border: 1.5px solid var(--border);
-  }
-
-  .face-front {
-    background: var(--card-bg);
-    color: var(--text);
-    font-size: clamp(9px, 1.8vw, 12px);
-    line-height: 1.4;
-    gap: 5px;
-  }
-
-  .face-back {
-    background: #589596;
-    color: #ffffff;
-    font-size: clamp(8.5px, 1.7vw, 11.5px);
-    line-height: 1.35;
-    gap: 4px;
-    transform: rotateY(180deg);
-    padding: 6px 5px;
-  }
-
-  .cell:hover .face-front {
-    border-color: var(--purple-mid);
-    box-shadow: 0 0 0 2px rgba(127, 119, 221, 0.15);
-  }
-
-  .cell.selected .face-front {
-    background: #b1d1cf;
-    border-color: #7fb8b6;
-  }
-
-  .cell.free .face-front {
-    background: var(--amber-light);
-    border-color: var(--amber-mid);
-  }
-
-  .cell.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.8);
-    transition: opacity 0.35s, transform 0.35s;
-  }
-
-  .check-ring {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: var(--purple-mid);
-    display: none;
-    align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .cell.selected .check-ring { display: flex; }
-
-  .check-ring svg {
-    width: 11px; height: 11px;
-    stroke: white;
-    stroke-width: 2.5;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .action-text { font-size: inherit; }
-
-  .free-label {
-    font-size: 8.5px;
-    color: var(--amber-dark);
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    opacity: 0.7;
-  }
-
-  .back-str-a {
-    font-family: 'Noto Serif TC', serif;
-    font-weight: 700;
-    font-size: clamp(10px, 2vw, 13px);
-    color: #ffffff;
-  }
-
-  .back-reason {
-    font-size: clamp(8px, 1.5vw, 10px);
-    color: rgba(255,255,255,0.85);
-  }
-
-  .back-divider {
-    width: 50%;
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    margin: 3px 0;
-  }
-
-  .back-str-b {
-    font-family: 'Noto Serif TC', serif;
-    font-weight: 700;
-    font-size: clamp(9px, 1.8vw, 12px);
-    color: rgba(255,255,255,0.9);
-  }
-
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-family: 'Noto Sans TC', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 9px 20px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, transform 0.1s;
-    white-space: nowrap;
-  }
-
-  .btn:hover { background: #F0EEF8; border-color: var(--purple-mid); }
-  .btn:active { transform: scale(0.97); }
-
-  .btn-primary {
-    background: var(--purple-mid);
-    color: white;
-    border-color: var(--purple-dark);
-  }
-  .btn-primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
-
-  .btn-reset {
-    background: transparent;
-    color: var(--text-muted);
-    border-color: transparent;
-    font-size: 12px;
-    padding: 9px 12px;
-  }
-  .btn-reset:hover { background: #F5F4F0; color: var(--text); }
-
-  .count-label {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .hint {
-    font-size: 11.5px;
-    color: var(--text-muted);
-    margin-top: 10px;
-    text-align: center;
-    min-height: 18px;
-    line-height: 1.5;
-  }
-
-  .result-banner {
-    display: none;
-    text-align: center;
-    background: var(--teal-light);
-    border: 1px solid rgba(29, 158, 117, 0.3);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-top: 1rem;
-    font-size: 13px;
-    color: var(--teal-dark);
-    line-height: 1.7;
-  }
-
-  .result-banner.show { display: block; animation: fadeIn 0.4s ease; }
-  .result-banner strong { font-family: 'Noto Serif TC', serif; font-size: 16px; display: block; margin-bottom: 4px; }
-
-  .btn-share {
-    background: #426e6f;
-    color: white;
-    border-color: #2f4f50;
-    padding: 10px 28px;
-    font-size: 14px;
-  }
-  .btn-share:hover { background: #2f4f50; border-color: #2f4f50; }
-
-  @media (max-width: 480px) {
-    .game-wrapper { padding: 1.2rem 0.6rem 2rem; }
-    .grid { gap: 5px; }
-    .face { padding: 5px 3px; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --amber-light: #FAEEDA; --amber-dark: #633806;
+  --bg: #FAF9F7; --card-bg: #FFFFFF;
+  --text: #1A1A1A; --text-muted: #6B6B6B;
+  --border: rgba(0,0,0,0.1); --radius: 10px;
+}
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0; }
+.game-wrapper { max-width: 680px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+.header { text-align: center; margin-bottom: 1.8rem; }
+.header-badge { display: inline-block; background: var(--amber-light); color: var(--amber-dark); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+.header h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(20px, 5vw, 28px); font-weight: 700; line-height: 1.4; margin-bottom: 8px; }
+.header p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+.phase-bar { display: flex; align-items: center; gap: 8px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: var(--text-muted); }
+.phase-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; background: #f4bfe7; color: #7a3a6a; }
+#phase-text { font-weight: 500; color: var(--text); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 1.2rem; }
+.cell { aspect-ratio: 1; perspective: 700px; cursor: pointer; }
+.cell-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); border-radius: var(--radius); }
+.cell.flipped .cell-inner { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 7px 5px; text-align: center; border: 1.5px solid var(--border); }
+.face-front { background: var(--card-bg); color: var(--text); font-size: clamp(10px, 1.8vw, 13px); line-height: 1.4; gap: 5px; }
+.face-back { background: #589596; color: #fff; font-size: clamp(9px, 1.7vw, 12px); line-height: 1.2; gap: 2px; transform: rotateY(180deg); padding: 4px; }
+.cell:hover .face-front { border-color: #426e6f; box-shadow: 0 0 0 2px rgba(66,110,111,0.15); }
+.cell.selected .face-front { background: #b1d1cf; border-color: #7fb8b6; }
+.cell.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); transition: opacity 0.35s, transform 0.35s; }
+.check-ring { width: 20px; height: 20px; border-radius: 50%; background: #426e6f; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
+.cell.selected .check-ring { display: flex; }
+.check-ring svg { width: 11px; height: 11px; stroke: white; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.back-str-a { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(10px, 1.8vw, 13px); color: #fff; }
+.back-reason { font-size: clamp(8px, 1.4vw, 10px); color: rgba(255,255,255,0.85); }
+.back-divider { width: 50%; border: none; border-top: 1px solid rgba(255,255,255,0.3); margin: 2px 0; }
+.back-str-b { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(9px, 1.6vw, 12px); color: rgba(255,255,255,0.9); }
+.controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.btn { font-family: 'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 500; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.1s; white-space: nowrap; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: #426e6f; color: white; border-color: #2f4f50; }
+.btn-primary:hover { background: #2f4f50; }
+.btn-reset { background: transparent; color: var(--text-muted); border-color: transparent; font-size: 12px; padding: 9px 12px; }
+.btn-reset:hover { background: #F5F4F0; color: var(--text); }
+.btn-share { background: #426e6f; color: white; border-color: #2f4f50; padding: 10px 22px; }
+.btn-share:hover { background: #2f4f50; }
+.count-label { margin-left: auto; font-size: 12px; color: var(--text-muted); }
+.hint { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; text-align: center; min-height: 18px; line-height: 1.5; }
+.share-area { display: none; text-align: center; margin-top: 1.5rem; }
+.share-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+.share-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.ig-copied { display: none; font-size: 11px; color: #426e6f; margin-top: 8px; }
+@media (max-width: 480px) {
+  .game-wrapper { padding: 1.2rem 0.6rem 2rem; }
+  .grid { gap: 5px; }
+  .face { padding: 5px 3px; }
+}
 </style>
 </head>
 <body>
-
 <div class="game-wrapper">
-
   <div class="header">
     <div class="header-badge">VIA 優勢 × 五月賓果</div>
     <h1>報稅理財的優勢大盤點</h1>
     <p>每個讓你崩潰（或感到驕傲）的報稅行為，<br>背後都藏著你獨特的人格優勢。</p>
   </div>
-
   <div class="phase-bar">
     <div class="phase-icon" id="phaseIcon">1</div>
     <span id="phase-text">選取中：點格子圈選符合自己的行為</span>
   </div>
-
   <div class="grid" id="grid"></div>
-
   <div class="controls">
     <button class="btn btn-primary" id="confirmBtn">確認選擇 →</button>
     <button class="btn btn-reset" id="resetBtn">重置</button>
     <span class="count-label" id="countLabel">已選 0 格</span>
   </div>
-
   <p class="hint" id="hint">點選格子，圈起符合你的行為；確認後翻牌看看你的優勢</p>
-
-  <div id="shareArea" style="display:none; text-align:center; margin-top:1.5rem;">
-    <p style="font-size:12px; color:#6B6B6B; margin-bottom:10px;">分享你的結果</p>
-    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+  <div class="share-area" id="shareArea">
+    <p class="share-label">分享你的結果</p>
+    <div class="share-btns">
       <button class="btn btn-share" id="shareFB">Facebook</button>
       <button class="btn btn-share" id="shareLINE">LINE</button>
       <button class="btn btn-share" id="shareIG">複製給 IG</button>
     </div>
-    <p id="igCopied" style="display:none; font-size:11px; color:#426e6f; margin-top:8px;">已複製！開啟 IG 貼上即可分享</p>
+    <p class="ig-copied" id="igCopied">已複製！開啟 IG 貼上即可分享</p>
   </div>
-
-
-
 </div>
 
 <script>
-const DATA = [
+var DATA = [
   { action:"早就整理好單據，5/1 準時申報", sa:"自律", ra:"習慣建立秩序，不讓任務堆積。", sb:"審慎", rb:"預留緩衝，避免最後一刻出錯。" },
   { action:"主動幫家人或科技苦手申報稅務", sa:"仁慈", ra:"純粹想幫他人減輕負擔的善意。", sb:"領導力", rb:"享受組織並帶領他人完成任務。" },
   { action:"上網徹底研究節稅條文與法規細節", sa:"好奇心", ra:"對稅制如何運作充滿探索興趣。", sb:"學習力", rb:"享受掌握專業知識帶來的滿足感。" },
@@ -382,52 +107,56 @@ const DATA = [
   { action:"報稅期限最後一小時，才驚險完成申報", sa:"熱情", ra:"在極限邊緣發揮爆發力，活得有張力。", sb:"勇敢", rb:"不畏懼壓力，能在危急時刻保持行動。" },
   { action:"冷靜引導焦慮的家人完成繁瑣步驟", sa:"領導力", ra:"在混亂中指引方向，讓大家安心。", sb:"謙虛", rb:"不誇大自己的付出，默默解決問題。" },
   { action:"對稅務人員或客服保持禮貌、客氣詢問", sa:"謙虛", ra:"尊重專業，不因身為納稅人而自大。", sb:"社交智慧", rb:"知道友善溝通是解決問題的捷徑。" },
-  { action:"與另一半討論報稅後的家庭財務願景", sa:"愛", ra:"將財務視為維護家庭關係的重要基石。", sb:"希望", rb:"對共同構建的未來藍圖充滿美好憧憬。" },
+  { action:"與另一半討論報稅後的家庭財務願景", sa:"愛", ra:"將財務視為維護家庭關係的重要基石。", sb:"希望", rb:"對共同構建的未來藍圖充滿美好憧憬。" }
 ];
 
-let phase = 'select';
-let selected = new Set();
-let flipped = new Set();
+var phase = 'select';
+var selected = new Set();
+var flipped = new Set();
 
-const grid = document.getElementById('grid');
-const confirmBtn = document.getElementById('confirmBtn');
-const resetBtn = document.getElementById('resetBtn');
-const countLabel = document.getElementById('countLabel');
-const phaseText = document.getElementById('phase-text');
-const phaseIcon = document.getElementById('phaseIcon');
-const hint = document.getElementById('hint');
+var grid = document.getElementById('grid');
+var confirmBtn = document.getElementById('confirmBtn');
+var resetBtn = document.getElementById('resetBtn');
+var countLabel = document.getElementById('countLabel');
+var phaseText = document.getElementById('phase-text');
+var phaseIcon = document.getElementById('phaseIcon');
+var hint = document.getElementById('hint');
+var shareArea = document.getElementById('shareArea');
+var shareFB = document.getElementById('shareFB');
+var shareLINE = document.getElementById('shareLINE');
+var shareIG = document.getElementById('shareIG');
+var igCopied = document.getElementById('igCopied');
 
-const shareArea = document.getElementById('shareArea');
-const shareBtn = document.getElementById('shareBtn');
+function buildGrid() {
   grid.innerHTML = '';
-  DATA.forEach((d, i) => {
-    const cell = document.createElement('div');
-    cell.className = 'cell' + (d.free ? ' free' : '') + (selected.has(i) ? ' selected' : '');
-    cell.dataset.index = i;
-    cell.innerHTML = `
-      <div class="cell-inner">
-        <div class="face face-front">
-          <span class="check-ring"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
-          <span class="action-text">${d.action}</span>
-          ${d.free ? '<span class="free-label">自由位</span>' : ''}
-        </div>
-        <div class="face face-back">
-          <span class="back-str-a">${d.sa}</span>
-          <span class="back-reason">${d.ra}</span>
-          <hr class="back-divider">
-          <span class="back-str-b">${d.sb}</span>
-          <span class="back-reason">${d.rb}</span>
-        </div>
-      </div>`;
-    cell.addEventListener('click', () => onCellClick(i));
-    grid.appendChild(cell);
-  });
+  for (var i = 0; i < DATA.length; i++) {
+    (function(idx) {
+      var d = DATA[idx];
+      var cell = document.createElement('div');
+      cell.className = 'cell' + (selected.has(idx) ? ' selected' : '');
+      cell.innerHTML =
+        '<div class="cell-inner">' +
+          '<div class="face face-front">' +
+            '<span class="check-ring"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>' +
+            '<span>' + d.action + '</span>' +
+          '</div>' +
+          '<div class="face face-back">' +
+            '<span class="back-str-a">' + d.sa + '</span>' +
+            '<span class="back-reason">' + d.ra + '</span>' +
+            '<hr class="back-divider">' +
+            '<span class="back-str-b">' + d.sb + '</span>' +
+            '<span class="back-reason">' + d.rb + '</span>' +
+          '</div>' +
+        '</div>';
+      cell.addEventListener('click', function() { onCellClick(idx); });
+      grid.appendChild(cell);
+    })(i);
+  }
 }
 
 function onCellClick(i) {
-  const cell = grid.children[i];
+  var cell = grid.children[i];
   if (phase === 'select') {
-    if (DATA[i].free) return;
     if (selected.has(i)) {
       selected.delete(i);
       cell.classList.remove('selected');
@@ -435,8 +164,7 @@ function onCellClick(i) {
       selected.add(i);
       cell.classList.add('selected');
     }
-    const s = selected.size;
-    countLabel.textContent = `已選 ${s} 格`;
+    countLabel.textContent = '已選 ' + selected.size + ' 格';
   } else if (phase === 'flip') {
     if (!selected.has(i)) return;
     if (flipped.has(i)) {
@@ -449,69 +177,53 @@ function onCellClick(i) {
   }
 }
 
-
-
-confirmBtn.addEventListener('click', () => {
+confirmBtn.addEventListener('click', function() {
   if (phase === 'select') {
     phase = 'flip';
-    DATA.forEach((d, i) => {
-      const cell = grid.children[i];
-      if (!selected.has(i)) cell.classList.add('hidden');
-    });
+    for (var i = 0; i < DATA.length; i++) {
+      if (!selected.has(i)) grid.children[i].classList.add('hidden');
+    }
     confirmBtn.textContent = '全部翻回正面';
     phaseText.textContent = '翻牌中：點格子查看你的優勢';
     phaseIcon.textContent = '2';
-    phaseIcon.classList.add('active-flip');
-    hint.textContent = '點選格子翻面看優勢，再點一次翻回正面';
+    hint.textContent = '點選格子翻面看優勢，再點一次即可翻回正面';
     shareArea.style.display = 'block';
   } else {
-    flipped.forEach(i => grid.children[i].classList.remove('flipped'));
+    flipped.forEach(function(i) { grid.children[i].classList.remove('flipped'); });
     flipped.clear();
     hint.textContent = '已全部翻回正面，點個別格子再翻一次';
   }
 });
 
-const shareFB = document.getElementById('shareFB');
-const shareLINE = document.getElementById('shareLINE');
-const shareIG = document.getElementById('shareIG');
-const igCopied = document.getElementById('igCopied');
-
-function getShareText() {
-  const actions = [...selected].map(i => `・${DATA[i].action}`).join('\n');
-  const strengths = [...selected].map(i => `${DATA[i].sa}、${DATA[i].sb}`).join('、');
-  return { actions, strengths };
-}
-
-shareFB.addEventListener('click', () => {
-  const url = encodeURIComponent(location.href);
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+shareFB.addEventListener('click', function() {
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank');
 });
 
-shareLINE.addEventListener('click', () => {
-  const { actions, strengths } = getShareText();
-  const text = `我在「報稅理財優勢賓果」選了 ${selected.size} 個行為！\n\n${actions}\n\n我的優勢包含：${strengths}\n\n來玩看看你是哪種人 👉 ${location.href}`;
-  window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+shareLINE.addEventListener('click', function() {
+  var actions = Array.from(selected).map(function(i) { return '・' + DATA[i].action; }).join('\n');
+  var strengths = Array.from(selected).map(function(i) { return DATA[i].sa + '、' + DATA[i].sb; }).join('、');
+  var text = '我在「報稅理財優勢賓果」選了 ' + selected.size + ' 個行為！\n\n' + actions + '\n\n我的優勢包含：' + strengths + '\n\n來玩看看你是哪種人 👉 ' + location.href;
+  window.open('https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(location.href) + '&text=' + encodeURIComponent(text), '_blank');
 });
 
-shareIG.addEventListener('click', () => {
-  const { actions, strengths } = getShareText();
-  const text = `我在「報稅理財優勢賓果」選了 ${selected.size} 個行為！\n\n${actions}\n\n我的優勢包含：${strengths}\n\n來玩看看你是哪種人 👉 ${location.href}`;
-  navigator.clipboard.writeText(text).then(() => {
-    igCopied.style.display = 'block';
-    setTimeout(() => { igCopied.style.display = 'none'; }, 4000);
-    if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
-      setTimeout(() => { window.location.href = 'instagram://'; }, 500);
-    }
-  });
+shareIG.addEventListener('click', function() {
+  var actions = Array.from(selected).map(function(i) { return '・' + DATA[i].action; }).join('\n');
+  var strengths = Array.from(selected).map(function(i) { return DATA[i].sa + '、' + DATA[i].sb; }).join('、');
+  var text = '我在「報稅理財優勢賓果」選了 ' + selected.size + ' 個行為！\n\n' + actions + '\n\n我的優勢包含：' + strengths + '\n\n來玩看看你是哪種人 👉 ' + location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      igCopied.style.display = 'block';
+      setTimeout(function() { igCopied.style.display = 'none'; }, 4000);
+    });
+  }
 });
 
-resetBtn.addEventListener('click', () => {
+resetBtn.addEventListener('click', function() {
   phase = 'select';
   selected = new Set();
   flipped = new Set();
   phaseText.textContent = '選取中：點格子圈選符合自己的行為';
   phaseIcon.textContent = '1';
-  phaseIcon.classList.remove('active-flip');
   confirmBtn.textContent = '確認選擇 →';
   hint.textContent = '點選格子，圈起符合你的行為；確認後翻牌看看你的優勢';
   countLabel.textContent = '已選 0 格';
